@@ -1,0 +1,22 @@
+[project]
+name = "prompter-lex"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "paskn", email = "pashakhin@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "llm>=0.23",
+    "llm-gemini",
+    "llm-mistral",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv.sources]
+llm-gemini = { git = "https://github.com/simonw/llm-gemini.git" }
+llm-mistral = { git = "https://github.com/simonw/llm-mistral.git" }
