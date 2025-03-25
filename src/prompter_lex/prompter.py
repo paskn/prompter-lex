@@ -55,3 +55,57 @@ def chunk_df(df, n_chunks, path_dir):
         saved_files.append(file_path)
     
     return saved_files
+
+
+def merge_prompt_chunk(prompt, data_dir, out_dir):
+    """
+    Merges a prompt string with the contents of each CSV file in data_dir
+    and saves the results as markdown files in out_dir.
+    
+    Parameters:
+    -----------
+    prompt : str
+        The prompt text to prepend to each CSV file's contents
+    data_dir : str
+        Path to the directory containing CSV files
+    out_dir : str
+        Path to the directory where output markdown files will be saved
+    
+    Returns:
+    --------
+    list
+        List of file paths where merged content was saved
+    """
+    # Ensure the output directory exists
+    os.makedirs(out_dir, exist_ok=True)
+    
+    # Get list of CSV files in the data directory
+    csv_files = glob.glob(os.path.join(data_dir, "*.csv"))
+    
+    # Store output file paths
+    output_files = []
+    
+    # Process each CSV file
+    for csv_file in csv_files:
+        # Get the base filename without extension
+        base_filename = os.path.basename(csv_file)
+        filename_without_ext = os.path.splitext(base_filename)[0]
+        
+        # Read the CSV file into a string
+        with open(csv_file, 'r', encoding='utf-8') as f:
+            csv_content = f.read()
+        
+        # Merge the prompt with the CSV content
+        merged_content = prompt + "\n\n" + csv_content
+        
+        # Create the output file path
+        output_file = os.path.join(out_dir, f"{filename_without_ext}.md")
+        
+        # Save the merged content as a markdown file
+        with open(output_file, 'w', encoding='utf-8') as f:
+            f.write(merged_content)
+        
+        print(f"Merged prompt with {csv_file} and saved to {output_file}")
+        output_files.append(output_file)
+    
+    return output_files    
